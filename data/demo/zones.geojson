@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "_note": "SYNTHETIC demo zones drawn loosely over Fairfax, Virginia. They are NOT official boundaries. Positions are [longitude, latitude] as in GeoJSON and Appwrite TablesDB.",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Riverside core (synthetic)", "tier": 0 },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-77.322, 38.836], [-77.296, 38.833], [-77.284, 38.848], [-77.293, 38.862], [-77.318, 38.861], [-77.322, 38.836]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Greater Riverside (synthetic)", "tier": 1 },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-77.365, 38.812], [-77.262, 38.806], [-77.236, 38.85], [-77.27, 38.895], [-77.352, 38.892], [-77.38, 38.85], [-77.365, 38.812]]]
+      }
+    }
+  ]
+}

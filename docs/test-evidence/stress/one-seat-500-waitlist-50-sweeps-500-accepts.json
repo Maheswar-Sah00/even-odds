@@ -1,0 +1,42 @@
+{
+  "scenario": "one-seat-500-waitlist-50-sweeps-500-accepts",
+  "runId": "itmvnsqydh5k5",
+  "endpoint": "https://sfo.cloud.appwrite.io/v1",
+  "at": "2026-10-25T12:25:03.473Z",
+  "waitlisted": 500,
+  "sweeps": {
+    "calls": 50,
+    "promotedReported": 1,
+    "errorKinds": {},
+    "firstWave": {},
+    "retries": 0,
+    "ms": 16914
+  },
+  "accepts": {
+    "calls": 500,
+    "outcomes": {
+      "changed": 1,
+      "replayed": 243,
+      "unchanged": 256
+    },
+    "errorKinds": {},
+    "firstWave": {},
+    "retries": 0,
+    "ms": 11250
+  },
+  "forgedOfferResponse": "not_found",
+  "committed": {
+    "ledgers": [
+      {
+        "ledger": "W1/young",
+        "capacity": 1,
+        "taken": 1,
+        "holding": 1
+      }
+    ],
+    "placements": 2,
+    "holding": 1,
+    "waitlist": 500,
+    "promoted": 1
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "scenario": "duplicate-key-40",
+  "runId": "itmvnsqydh5k5",
+  "endpoint": "https://sfo.cloud.appwrite.io/v1",
+  "at": "2026-10-25T12:28:47.745Z",
+  "outcomes": {
+    "replayed": 39,
+    "placed": 1
+  },
+  "errorKinds": {},
+  "firstWave": {},
+  "retries": 0,
+  "ms": 5578,
+  "committed": {
+    "ledgers": [
+      {
+        "ledger": "W1/young",
+        "capacity": 5,
+        "taken": 1,
+        "holding": 1
+      }
+    ],
+    "placements": 1,
+    "holding": 1,
+    "waitlist": 0,
+    "promoted": 0
+  }
+}

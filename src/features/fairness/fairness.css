@@ -1,0 +1,72 @@
+/* Fairness report card (src/features/fairness). Series: lottery in the brand purple (filled
+   circle), first come in dark yellow (hollow diamond); shapes differ too, so colour is never
+   the only cue. */
+:root,
+:root[data-theme='light'] {
+  --series-lottery: #7339a3;
+  --series-fc: #a87400;
+}
+:root[data-theme='dark'] {
+  --series-lottery: #d2b4ef;
+  --series-fc: #e8c766;
+}
+.fairness-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.rate-plot {
+  display: block;
+  width: 160px;
+  height: 30px;
+}
+
+.rate-plot__axis {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+
+.rate-plot__tick {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.rate-plot__ci {
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.rate-plot__ci--lottery {
+  stroke: var(--series-lottery);
+}
+
+.rate-plot__ci--fc {
+  stroke: var(--series-fc);
+}
+
+.rate-plot__lottery {
+  fill: var(--series-lottery);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+
+.rate-plot__fc {
+  fill: var(--surface);
+  stroke: var(--series-fc);
+  stroke-width: 2;
+}
+
+.rate-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: center;
+  margin: 0;
+}
+
+.rate-legend span {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+}

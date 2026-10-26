@@ -1,0 +1,50 @@
+{
+  "scenario": "draw-4-workers",
+  "runId": "itmvnsqydh5k5",
+  "endpoint": "https://sfo.cloud.appwrite.io/v1",
+  "at": "2026-10-25T12:30:35.621Z",
+  "steps": 15,
+  "finals": [
+    "completed",
+    "completed",
+    "completed",
+    "completed"
+  ],
+  "errorKinds": {},
+  "interrupted": 0,
+  "runStatus": "completed",
+  "runError": null,
+  "programStatus": "drawn",
+  "committed": {
+    "ledgers": [
+      {
+        "ledger": "W1/young",
+        "capacity": 6,
+        "taken": 6,
+        "holding": 6
+      },
+      {
+        "ledger": "W1/old",
+        "capacity": 4,
+        "taken": 4,
+        "holding": 4
+      },
+      {
+        "ledger": "W2/young",
+        "capacity": 5,
+        "taken": 5,
+        "holding": 5
+      },
+      {
+        "ledger": "W2/old",
+        "capacity": 4,
+        "taken": 4,
+        "holding": 4
+      }
+    ],
+    "placements": 19,
+    "holding": 19,
+    "waitlist": 116,
+    "promoted": 0
+  }
+}

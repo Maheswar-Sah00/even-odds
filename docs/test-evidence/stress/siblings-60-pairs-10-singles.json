@@ -1,0 +1,38 @@
+{
+  "scenario": "siblings-60-pairs-10-singles",
+  "runId": "itmvnsqydh5k5",
+  "endpoint": "https://sfo.cloud.appwrite.io/v1",
+  "at": "2026-10-25T12:28:17.496Z",
+  "outcomes": {
+    "no_capacity": 64,
+    "placed": 6
+  },
+  "errorKinds": {},
+  "firstWave": {
+    "service:rate_limited:429": 2
+  },
+  "retries": 2,
+  "ms": 7860,
+  "placedPairs": 0,
+  "splitPairs": 0,
+  "committed": {
+    "ledgers": [
+      {
+        "ledger": "W1/young",
+        "capacity": 6,
+        "taken": 6,
+        "holding": 6
+      },
+      {
+        "ledger": "W1/old",
+        "capacity": 4,
+        "taken": 0,
+        "holding": 0
+      }
+    ],
+    "placements": 6,
+    "holding": 6,
+    "waitlist": 0,
+    "promoted": 0
+  }
+}

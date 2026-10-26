@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Even Odds: a fair, verifiable lottery for oversubscribed community programs." />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#faf9fb" />
+    <title>Even Odds: registration is a lottery, not a race</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Even Odds" />
+    <meta property="og:title" content="Even Odds: registration is a lottery, not a race" />
+    <meta property="og:description" content="Frozen inputs, public randomness and a draw anyone can replay, for oversubscribed community programs." />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      // Apply the remembered (or system) theme before first paint, so there is no flash.
+      (function () {
+        var t;
+        try {
+          t = localStorage.getItem('even-odds-theme');
+        } catch (e) {}
+        if (t !== 'light' && t !== 'dark') t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        var root = document.documentElement;
+        root.dataset.theme = t;
+        root.style.colorScheme = t;
+        if (t === 'dark') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#121014');
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..800&display=swap"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Even Odds needs JavaScript to run.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

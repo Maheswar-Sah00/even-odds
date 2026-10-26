@@ -1,0 +1,54 @@
+{
+  "scenario": "duplicate-jobs-16",
+  "runId": "itmvnsqydh5k5",
+  "endpoint": "https://sfo.cloud.appwrite.io/v1",
+  "at": "2026-10-25T12:33:59.775Z",
+  "jobs": 16,
+  "errorKinds": {},
+  "firstWave": {},
+  "retries": 0,
+  "ms": 106652,
+  "releaseMarkers": 20,
+  "promoted": [
+    "old#1",
+    "old#2",
+    "old#3",
+    "old#4",
+    "old#5",
+    "old#6",
+    "old#7",
+    "old#8",
+    "young#1",
+    "young#10",
+    "young#11",
+    "young#12",
+    "young#2",
+    "young#3",
+    "young#4",
+    "young#5",
+    "young#6",
+    "young#7",
+    "young#8",
+    "young#9"
+  ],
+  "committed": {
+    "ledgers": [
+      {
+        "ledger": "W1/young",
+        "capacity": 12,
+        "taken": 12,
+        "holding": 12
+      },
+      {
+        "ledger": "W1/old",
+        "capacity": 8,
+        "taken": 8,
+        "holding": 8
+      }
+    ],
+    "placements": 40,
+    "holding": 20,
+    "waitlist": 30,
+    "promoted": 20
+  }
+}

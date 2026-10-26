@@ -1,0 +1,31 @@
+{
+  "scenario": "one-seat-500-placements",
+  "runId": "itmvnsqydh5k5",
+  "endpoint": "https://sfo.cloud.appwrite.io/v1",
+  "at": "2026-10-25T12:23:41.797Z",
+  "attempts": 500,
+  "outcomes": {
+    "no_capacity": 499,
+    "placed": 1
+  },
+  "errorKinds": {},
+  "firstWave": {
+    "service:rate_limited:429": 42
+  },
+  "retries": 244,
+  "ms": 101829,
+  "committed": {
+    "ledgers": [
+      {
+        "ledger": "W1/young",
+        "capacity": 1,
+        "taken": 1,
+        "holding": 1
+      }
+    ],
+    "placements": 2,
+    "holding": 1,
+    "waitlist": 0,
+    "promoted": 0
+  }
+}

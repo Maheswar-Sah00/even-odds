@@ -1,0 +1,33 @@
+{
+  "scenario": "conflicting-accepts-30",
+  "runId": "itmvnsqydh5k5",
+  "endpoint": "https://sfo.cloud.appwrite.io/v1",
+  "at": "2026-10-25T12:29:19.616Z",
+  "outcomes": {
+    "unchanged": 29,
+    "changed": 1
+  },
+  "attempts": {
+    "1": 1,
+    "2": 29
+  },
+  "errorKinds": {},
+  "firstWave": {},
+  "retries": 0,
+  "ms": 3845,
+  "exitMarkers": 1,
+  "committed": {
+    "ledgers": [
+      {
+        "ledger": "W1/young",
+        "capacity": 1,
+        "taken": 1,
+        "holding": 1
+      }
+    ],
+    "placements": 1,
+    "holding": 1,
+    "waitlist": 0,
+    "promoted": 0
+  }
+}

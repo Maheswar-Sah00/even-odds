@@ -1,0 +1,34 @@
+{
+  "scenario": "nearly-full-150-households",
+  "runId": "itmvnsqydh5k5",
+  "endpoint": "https://sfo.cloud.appwrite.io/v1",
+  "at": "2026-10-25T12:27:42.105Z",
+  "capacity": 40,
+  "preTaken": 35,
+  "outcomes": {
+    "no_capacity": 145,
+    "replayed": 4,
+    "placed": 1
+  },
+  "errorKinds": {},
+  "firstWave": {
+    "service:rate_limited:429": 73
+  },
+  "retries": 94,
+  "ms": 20622,
+  "splitPairs": 0,
+  "committed": {
+    "ledgers": [
+      {
+        "ledger": "W1/young",
+        "capacity": 40,
+        "taken": 40,
+        "holding": 40
+      }
+    ],
+    "placements": 40,
+    "holding": 40,
+    "waitlist": 0,
+    "promoted": 0
+  }
+}
