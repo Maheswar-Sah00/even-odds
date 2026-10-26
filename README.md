@@ -67,8 +67,9 @@ Appwrite Databases Hackathon 2026 · Database: **Appwrite TablesDB** · Solo bui
 14. [Limitations and roadmap](#14-limitations-and-roadmap)
 15. [Real and synthetic data](#15-real-and-synthetic-data)
 16. [Reference: scripts, environment, docs](#16-reference)
-17. [Sources](#17-sources)
-18. [Team](#18-team)
+17. [Editing the diagrams](#17-editing-the-diagrams)
+18. [Sources](#18-sources)
+19. [Team](#19-team)
 
 ---
 
@@ -76,6 +77,8 @@ Appwrite Databases Hackathon 2026 · Database: **Appwrite TablesDB** · Solo bui
 
 Popular community programs have more applicants than places, and most still sell them **first-come, first-served at a
 single moment**. That rewards the fastest connection, not need, and leaves families no way to check the result:
+
+<p align="center"><img src="docs/diagrams/02-race-vs-lottery.svg" alt="First come, first served: registration opens, thousands click at once, the site crashes, the fastest wins. Even Odds: apply in a window, freeze, drand seeds the lottery, one transaction per family, anyone can replay" width="900"></p>
 
 | What happened | Source |
 | --- | --- |
@@ -123,6 +126,10 @@ Lotteries have their own failure modes, and each one shaped the design:
 | 6 | **Siblings all-or-nothing** | Each family's placement is one TablesDB transaction with capped seat counters. If any sibling's seat is full, the whole family rolls back. |
 | 7 | **Offers and waitlist** | 48-hour offers; declines and expiries release the seat and promote the next child in strict lottery order, inside transactions. |
 | 8 | **Public verification** | `/replay/:programId` reruns the draw in the browser; `/fairness/:programId` reports placement rates, a first-come counterfactual and bias tests. |
+
+<p align="center"><img src="docs/diagrams/04-family-journey.svg" alt="Family journey: sign in, household, add children, get a ticket, apply, watch the odds, draw day, reply within 48 hours, check the replay" width="900"></p>
+
+<p align="center"><img src="docs/diagrams/05-one-ticket-per-child.svg" alt="Two parents, one ticket: household B's createRow on tickets is refused by the unique index on program and child key, B is told possible duplicate, and household A gets a link request" width="900"></p>
 
 **Why a lottery.** A lottery spread over a window removes the reason to rush. Everyone who applies on time has the same
 chance within their tier, and the first round of the draft is strategy-proof: ranking your true favourite first never
@@ -196,6 +203,8 @@ with a week, 0 "together only" families split. The replay reproduced all 29 plac
 
 ## 5. System overview
 
+<p align="center"><img src="docs/diagrams/01-system-overview.svg" alt="Families, organisers, the public and judges use one browser app; it signs in with Appwrite Auth, calls the api Function and reads TablesDB; the jobs Function runs hourly and fetches the drand beacon, which the browser replay also verifies" width="900"></p>
+
 | Part | Owns | Never does |
 | --- | --- | --- |
 | [`src/`](src/) (React, Vite) | Family, organiser, public verification and judge-demo screens; the browser replay | Hold the API key or import server code (enforced by ESLint) |
@@ -211,19 +220,14 @@ The Appwrite Free plan allows **two Functions** per project and no cron, so all 
 
 ### 6.1 Lifecycle
 
-```mermaid
-flowchart LR
-  A["<b>Setup</b><br/>sessions CSV<br/>zone polygons<br/>drand round N announced"] --> B["<b>Apply</b><br/>rank weeks, sibling mode<br/>duplicate child refused<br/>banded hourly odds"]
-  B --> C["<b>Freeze</b><br/>inputs hashed and<br/>published in one transaction"]
-  C --> D["<b>Draw</b><br/>round N seeds the order<br/>one transaction per family"]
-  D --> E["<b>Offers</b><br/>48 h replies<br/>waitlist in lottery order"]
-  D --> F["<b>Replay</b><br/>anyone reruns it<br/>in the browser"]
-```
+<p align="center"><img src="docs/diagrams/03-lifecycle.svg" alt="Six phases (setup, apply, freeze, draw, offers, verify), each with its actor and the database guarantee it relies on" width="900"></p>
 
 ### 6.2 The draw
 
 The draw is one pure module, [`shared/draw/`](shared/draw/), used by both the server and the browser replay, so they
 cannot disagree. Full specification: [docs/DRAW-ALGORITHM.md](docs/DRAW-ALGORITHM.md).
+
+<p align="center"><img src="docs/diagrams/06-the-draw.svg" alt="Frozen inputs and the drand seed fix the lottery order; a snake draft gives every family one week per round; each turn follows the sibling mode; the plan is committed one transaction per step and the rest join the waitlist" width="900"></p>
 
 **Lottery order**, fixed once, sorted by:
 
@@ -256,17 +260,7 @@ Before building on it, the critical behaviour was tested on Appwrite Cloud. It f
 | Sibling group: ledger A has room, ledger B is full, both in one transaction | Commit fails; **A stays unchanged and no placements exist** |
 | 20 concurrent placements on a capacity-3 ledger | Exactly 3 placed, 17 `no_capacity` |
 
-```mermaid
-sequenceDiagram
-  participant D as Draw step (one family)
-  participant T as TablesDB transaction
-  D->>T: incrementRowColumn(Week 1 · ages 5–7, +1, max 5)
-  D->>T: incrementRowColumn(Week 1 · ages 8–10, +1, max 3)
-  D->>T: createRow(placements) × 2 (unique child, week)
-  D->>T: commit
-  T-->>D: attribute_limit_exceeded: the whole family rolls back
-  D->>D: re-read counters, try the family's next ranked week
-```
+<p align="center"><img src="docs/diagrams/07-placement-transaction.svg" alt="One family, one transaction: two capped seat increments and two unique placements are staged; the commit either succeeds, rolls the whole family back on attribute_limit_exceeded, or re-reads the idempotency row on transaction_conflict" width="900"></p>
 
 Because staged values are mocks, results always come from a **post-commit re-read**. A unique violation and an
 optimistic conflict both surface as `transaction_conflict`, so `placeGroup` re-reads its idempotency row to tell them
@@ -274,6 +268,8 @@ apart before retrying with jitter. All of this is in [docs/VERIFIED-BEHAVIOUR.md
 naming the test that re-checks it.
 
 ### 6.4 Freeze and drand
+
+<p align="center"><img src="docs/diagrams/08-freeze-and-drand.svg" alt="Timeline: publish fixes round N, applications run until the window closes, the freeze happens before N minus 30 minutes, drand publishes round N, then the jobs Function verifies the beacon and draws" width="900"></p>
 
 1. **Announce at publish.** The program commits to quicknet round `N = first round at or after window_close + 3 h`.
    N depends only on the close time, which is locked once the program is published.
@@ -289,6 +285,8 @@ Trust assumptions and what the protocol does **not** prove are written out in
 
 ### 6.5 Offers and waitlist
 
+<p align="center"><img src="docs/diagrams/09-offers-and-waitlist.svg" alt="Offer states: offered can become accepted, declined, expired or cancelled; accepted can be given back; every exit except accept releases the seat in one transaction and promotes the next family in lottery order" width="900"></p>
+
 Offers last 48 hours, measured on Appwrite's server clock. A decline, a give-back or an expiry releases the seat and
 promotes the next waiting child **in lottery order** in the same transaction. Duplicate sweeps, duplicate promotion jobs
 and hundreds of simultaneous accepts are all idempotent. Details:
@@ -302,6 +300,8 @@ shows a precise percentage, never shows a tier with fewer than 5 children, freez
 families that ranking honestly never hurts them. Details: [docs/ODDS.md](docs/ODDS.md).
 
 ### 6.7 Replay and fairness report
+
+<p align="center"><img src="docs/diagrams/10-replay.svg" alt="The browser loads public artifacts and fetches drand itself, then checks eleven steps from audit log integrity to replayed placements versus the published result; the fairness report is built only from verified artifacts" width="900"></p>
 
 - **Replay** (`/replay/:programId`): verifies the audit hash chain, the drand round and signature, the inputs hash, the
   seed and the plan hash, then recomputes every placement in the browser. A *Try to break it* panel edits a copy of the
@@ -328,6 +328,8 @@ families that ranking honestly never hurts them. Details: [docs/ODDS.md](docs/OD
 - **Accessible maps.** Every map lists its zones and tiers as text, and a home location can be entered by keyboard.
 - **Roles.** Families at `/family`, organisers at `/organiser` (an Appwrite Team), and the public at `/programs`,
   `/replay` and `/fairness`.
+
+<p align="center"><img src="docs/diagrams/12-organiser-flow.svg" alt="Organiser flow: create a program, import sessions, draw zones, check readiness and publish; then demand, verification, overrides, freeze and draw, offers and waitlists, audit and fairness, with every privileged change logged in the same transaction" width="900"></p>
 
 ## 8. Getting started
 
@@ -364,6 +366,8 @@ with a list of problems. The variables are listed in [Reference](#16-reference).
 Open **`/demo`** and press **Start the judge demo**. No sign-up: a guest session gets its own private, pre-seeded
 sandbox (16 synthetic families, 8 sessions, 2 zones, three sibling modes). Every control runs the **production code**
 against real TablesDB rows, and the **Database inspector** shows what the database answered.
+
+<p align="center"><img src="docs/diagrams/11-judge-sandbox.svg" alt="Judge sandbox: a guest session calls the api demo area without naming a program, the server finds the caller's own sandbox, and the seven guided steps run with the database inspector beside them" width="900"></p>
 
 | Step | What to press | What the database does | Measured |
 | --- | --- | --- | --- |
@@ -498,7 +502,7 @@ BookMyShow in 24 hours).
 | --- | --- |
 | Appwrite Cloud TablesDB: every rule above is enforced by the live database | Every family, child, program and session ([`data/demo/sessions.csv`](data/demo/sessions.csv)) |
 | The drand quicknet beacon, fetched and BLS-verified live | Zone polygons drawn loosely over Fairfax, VA ([`data/demo/zones.geojson`](data/demo/zones.geojson)), not official boundaries |
-| The news reports, audits and research in [Sources](#17-sources) | The 120 seeded applicant households and the 16 judge-sandbox families |
+| The news reports, audits and research in [Sources](#18-sources) | The 120 seeded applicant households and the 16 judge-sandbox families |
 
 ## 16. Reference
 
@@ -578,7 +582,30 @@ Server (`.env.server`, **secret**, never bundled):
 
 </details>
 
-## 17. Sources
+## 17. Editing the diagrams
+
+Every diagram in this README was drawn with [Excalidraw](https://excalidraw.com). The editable sources sit next to the
+exported images in [`docs/diagrams/`](docs/diagrams):
+
+| Diagram | Source |
+| --- | --- |
+| First come vs Even Odds | `02-race-vs-lottery.excalidraw` |
+| The family journey | `04-family-journey.excalidraw` |
+| Two parents, one ticket | `05-one-ticket-per-child.excalidraw` |
+| System overview | `01-system-overview.excalidraw` |
+| Program lifecycle | `03-lifecycle.excalidraw` |
+| The draw | `06-the-draw.excalidraw` |
+| One family, one transaction | `07-placement-transaction.excalidraw` |
+| Freeze and drand | `08-freeze-and-drand.excalidraw` |
+| Offers and waitlist | `09-offers-and-waitlist.excalidraw` |
+| Replay | `10-replay.excalidraw` |
+| The organiser flow | `12-organiser-flow.excalidraw` |
+| The judge demo sandbox | `11-judge-sandbox.excalidraw` |
+
+To edit one, open [excalidraw.com](https://excalidraw.com) → *Open* → choose the `.excalidraw` file, then *Export
+image* → SVG with *Background* on, and replace the matching `.svg`.
+
+## 18. Sources
 
 FFXnow, *Park Authority overhauls camp registration* (Jan 2025) · Central Oregon Daily, Bend summer camp registration
 (2026) · Block Club Chicago, Park District summer camp registration (21 Apr 2026) · Richmond News, swimming lesson
@@ -592,7 +619,7 @@ DV-2012 lottery · Dur, Morrill & Phan, *Family ties*, Theoretical Economics (20
 
 Full links are in the [design brief](docs/EvenOdds-design-brief.pdf).
 
-## 18. Team
+## 19. Team
 
 Built solo by **[Maheswar-Sah00](https://github.com/Maheswar-Sah00)** for the Appwrite Databases Hackathon 2026
 (19–31 Oct 2026). Open-source libraries used are listed in [`package.json`](package.json).
