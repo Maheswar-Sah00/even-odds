@@ -41,7 +41,7 @@ function Receipt({ programId, applicationId }: { programId: string; applicationI
         const weekLabel = new Map(ctx.sessions.map((x) => [x.week, x.label ?? x.week]));
         return (
           <div className="stack">
-            <PageHeader eyebrow="Application receipt" title={p.name} />
+            <PageHeader tone="cyan" eyebrow="Application receipt" title={p.name} />
             {justSubmitted ? (
               <Banner tone="success" title={justSubmitted === 'updated' ? 'Application updated' : 'Application received'}>
                 Keep your receipt code. You can change your choices until applications close.
@@ -159,7 +159,7 @@ export function ApplicationPage() {
   if (!db) {
     return (
       <div className="stack">
-        <PageHeader eyebrow="Application" title="Your application" />
+        <PageHeader tone="cyan" eyebrow="Application" title="Your application" />
         <NotConfiguredBanner what="Applications" />
       </div>
     );
@@ -170,7 +170,7 @@ export function ApplicationPage() {
       loadingLabel="Loading your application…"
       notFound={
         <>
-          <PageHeader eyebrow="Application" title="Your application" />
+          <PageHeader tone="cyan" eyebrow="Application" title="Your application" />
           <EmptyState title="Application not found" actions={<ButtonLink to="/family">Go to your household</ButtonLink>}>
             It does not exist, or it belongs to another household.
           </EmptyState>

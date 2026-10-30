@@ -60,7 +60,7 @@ function StartDemo() {
     <Card title="Start the judge demo" description="One click, no sign-up. You get a private sandbox: a pre-seeded camp program with 16 synthetic families, which only you can see.">
       <div className="stack">
         <ol className="start-steps">
-          <li>
+          <li data-tone="red">
             <span className="start-steps__icon" aria-hidden="true">
               <ShieldCheck size={20} strokeWidth={1.6} />
             </span>
@@ -69,7 +69,7 @@ function StartDemo() {
               Watch the database block a duplicate child and refuse an over-full sibling group.
             </span>
           </li>
-          <li>
+          <li data-tone="purple">
             <span className="start-steps__icon" aria-hidden="true">
               <Snowflake size={20} strokeWidth={1.6} />
             </span>
@@ -78,7 +78,7 @@ function StartDemo() {
               Fast-forward to the close: inputs are frozen and hashed, then a live drand round seeds the draw.
             </span>
           </li>
-          <li>
+          <li data-tone="burgundy">
             <span className="start-steps__icon" aria-hidden="true">
               <PlayCircle size={20} strokeWidth={1.6} />
             </span>
@@ -99,9 +99,12 @@ function StartDemo() {
   );
 }
 
-function StepCard({ n, title, state, children, action }: { n: number; title: string; state: 'done' | 'ready' | 'later'; children: ReactNode; action?: ReactNode }) {
+/** Each step takes the colour of what it shows: red = the database refused, purple = freeze and draw, green = offers, yellow = time passing, burgundy = verify. */
+type StepTone = 'red' | 'purple' | 'green' | 'yellow' | 'burgundy';
+
+function StepCard({ n, title, tone, state, children, action }: { n: number; title: string; tone: StepTone; state: 'done' | 'ready' | 'later'; children: ReactNode; action?: ReactNode }) {
   return (
-    <li className="demo-step" data-state={state}>
+    <li className="demo-step" data-state={state} data-tone={tone}>
       <div className="demo-step__head">
         <span className="demo-step__n" aria-hidden="true">{state === 'done' ? <CircleCheck size={18} /> : n}</span>
         <h3>
@@ -373,6 +376,7 @@ function Sandbox({ app, db }: { app: BrowserAppwrite; db: BrowserDb }) {
                 <ol className="demo-steps">
                   <StepCard
                     n={1}
+                    tone="red"
                     title="Two parents, one ticket"
                     state={done.has('duplicate') ? 'done' : open ? 'ready' : 'later'}
                     action={open ? <Button size="sm" icon={<Copy size={16} aria-hidden="true" />} loading={busy === 'duplicate'} loadingLabel="Trying…" disabled={busy !== null} onClick={() => void act('duplicate', 'Two parents, one ticket', async () => (await api.duplicateChild()).steps)}>Register Maya again from a second household</Button> : null}
@@ -382,6 +386,7 @@ function Sandbox({ app, db }: { app: BrowserAppwrite; db: BrowserDb }) {
                   </StepCard>
                   <StepCard
                     n={2}
+                    tone="purple"
                     title="Fast-forward to the close, freeze the inputs"
                     state={!open ? 'done' : 'ready'}
                     action={open ? <Button size="sm" icon={<FastForward size={16} aria-hidden="true" />} loading={busy === 'close'} loadingLabel="Freezing…" disabled={busy !== null} onClick={() => { setConfirm('close'); }}>Fast-forward to the close</Button> : null}
@@ -390,6 +395,7 @@ function Sandbox({ app, db }: { app: BrowserAppwrite; db: BrowserDb }) {
                   </StepCard>
                   <StepCard
                     n={3}
+                    tone="purple"
                     title="A live drand round seeds the draw"
                     state={drawn ? 'done' : frozen ? 'ready' : 'later'}
                     action={
@@ -410,6 +416,7 @@ function Sandbox({ app, db }: { app: BrowserAppwrite; db: BrowserDb }) {
                   </StepCard>
                   <StepCard
                     n={4}
+                    tone="red"
                     title="The database refused: full-seat rollback"
                     state={done.has('rollback') ? 'done' : drawn ? 'ready' : 'later'}
                     action={drawn ? <Button size="sm" icon={<ShieldAlert size={16} aria-hidden="true" />} loading={busy === 'rollback'} loadingLabel="Trying…" disabled={busy !== null} onClick={() => void act('rollback', 'Full-seat rollback', async () => (await api.rollback()).steps)}>Squeeze a sibling pair into a full week</Button> : null}
@@ -417,11 +424,12 @@ function Sandbox({ app, db }: { app: BrowserAppwrite; db: BrowserDb }) {
                     {status.rollbackFamily.children.map((c) => `${c.name} (${c.ageGroup})`).join(' and ')} try to take one week together in which one age group is full. Both
                     seats are staged in one transaction; the cap refuses it at commit and nothing is kept.
                   </StepCard>
-                  <StepCard n={5} title="Families reply" state={done.has('reply') ? 'done' : drawn && pendingOffers ? 'ready' : 'later'}>
+                  <StepCard n={5} tone="green" title="Families reply" state={done.has('reply') ? 'done' : drawn && pendingOffers ? 'ready' : 'later'}>
                     Accept or decline for any household in the table below. A decline releases the seat and offers it to the next waiting child in lottery order.
                   </StepCard>
                   <StepCard
                     n={6}
+                    tone="yellow"
                     title="Fast-forward 48 hours: offers expire, the waitlist moves"
                     state={done.has('expire') ? 'done' : drawn && pendingOffers ? 'ready' : 'later'}
                     action={drawn && pendingOffers ? <Button size="sm" icon={<FastForward size={16} aria-hidden="true" />} loading={busy === 'expire'} loadingLabel="Expiring…" disabled={busy !== null} onClick={() => { setConfirm('expire'); }}>Fast-forward 48 hours</Button> : null}
@@ -430,6 +438,7 @@ function Sandbox({ app, db }: { app: BrowserAppwrite; db: BrowserDb }) {
                   </StepCard>
                   <StepCard
                     n={7}
+                    tone="burgundy"
                     title="Replay it yourself"
                     state={drawn ? 'ready' : 'later'}
                     action={

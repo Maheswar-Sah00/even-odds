@@ -207,7 +207,7 @@ function LinkRequests({ familyId }: { familyId: string }) {
 export function FamilyHomePage() {
   const { appwrite } = useAppwriteContext();
   const household = useHousehold();
-  const header = <PageHeader eyebrow="My family" title="Household overview" description="Your household holds your children's details and applications. Only its guardians can see it." />;
+  const header = <PageHeader tone="cyan" eyebrow="My family" title="Household overview" description="Your household holds your children's details and applications. Only its guardians can see it." />;
   if (!appwrite) {
     return (
       <div className="stack">

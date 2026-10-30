@@ -5,6 +5,11 @@
   --aurora-wing: #fbf0cc;
   --aurora-wing-2: #dcf2e3;
   --aurora-ornament: #6a3596;
+  /* The hero glow picks up the four clover leaves of the logo. */
+  --leaf-red: #fbd9d5;
+  --leaf-yellow: #fbefc4;
+  --leaf-green: #d3f0de;
+  --leaf-purple: #e7d5f7;
   --frame: #eeeaef;
   --frame-inner: #f7f5f8;
   --orb-a: #ffffff;
@@ -21,6 +26,10 @@
   --aurora-wing: #2e2412;
   --aurora-wing-2: #142a1c;
   --aurora-ornament: #dcc4f3;
+  --leaf-red: #3d1d1b;
+  --leaf-yellow: #35290d;
+  --leaf-green: #132e1d;
+  --leaf-purple: #34234b;
   --frame: #242027;
   --frame-inner: #19171b;
   --orb-a: #f1e6fa;
@@ -92,7 +101,12 @@
   width: min(1240px, 130vw);
   height: 300px;
   margin-left: calc(min(1240px, 130vw) / -2);
-  background: radial-gradient(closest-side, var(--aurora-core) 0%, color-mix(in srgb, var(--aurora-core) 82%, transparent) 30%, color-mix(in srgb, var(--aurora-core) 30%, transparent) 62%, transparent 92%);
+  background:
+    radial-gradient(26% 78% at 20% 58%, var(--leaf-red), transparent),
+    radial-gradient(26% 78% at 40% 42%, var(--leaf-yellow), transparent),
+    radial-gradient(26% 78% at 60% 58%, var(--leaf-green), transparent),
+    radial-gradient(28% 80% at 80% 42%, var(--leaf-purple), transparent),
+    radial-gradient(closest-side, color-mix(in srgb, var(--aurora-core) 60%, transparent), transparent 92%);
   filter: blur(28px);
   opacity: 0.95;
   animation: aurora-breathe 14s ease-in-out infinite alternate;
@@ -339,9 +353,13 @@
 .showcase__tab:hover {
   color: var(--text);
 }
+.showcase__tab svg {
+  color: var(--tone-ink, currentColor);
+}
 .showcase__tab[aria-selected='true'] {
-  background: var(--surface);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--tone-soft, var(--surface)) 85%, var(--surface)) 0%, var(--surface) 100%);
   color: var(--text);
+  box-shadow: inset 0 3px 0 var(--tone, transparent);
 }
 .showcase__tab:focus-visible {
   outline-offset: -4px;
@@ -352,7 +370,7 @@
   padding: var(--space-6);
   border-radius: 0 0 24px 24px;
   background:
-    radial-gradient(900px 260px at 50% 0, var(--surface-muted), transparent 70%),
+    radial-gradient(900px 260px at 50% 0, color-mix(in srgb, var(--tone-soft, var(--surface-muted)) 70%, var(--surface)), transparent 70%),
     var(--surface);
   animation: panel-in 500ms var(--ease-out);
 }
@@ -962,7 +980,24 @@
   outline-offset: -6px;
 }
 .fcol__num {
-  font-size: 0.95rem;
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.2rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--tone-soft, transparent);
+  color: var(--tone-ink, var(--text));
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.fcol::before {
+  /* A thin stripe in the column's colour along the top edge. */
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: var(--tone, transparent);
+  z-index: 1;
 }
 .fcol__title {
   margin-top: auto;
@@ -1022,9 +1057,10 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
+  border-color: color-mix(in srgb, var(--tone, var(--border-strong)) 40%, var(--border));
   background:
-    radial-gradient(70% 90% at 0% 100%, var(--surface-muted), transparent 70%),
-    linear-gradient(180deg, var(--surface), var(--surface-muted));
+    radial-gradient(70% 90% at 0% 100%, var(--tone-soft, var(--surface-muted)), transparent 70%),
+    linear-gradient(180deg, var(--surface), color-mix(in srgb, var(--tone-soft, var(--surface-muted)) 60%, var(--surface)));
 }
 .fcol__figure::before {
   content: '';
@@ -1043,7 +1079,7 @@
 }
 .fcol__figure em {
   font-style: italic;
-  color: var(--text-muted);
+  color: var(--tone-ink, var(--text-muted));
 }
 .fcol__figure small {
   position: relative;
@@ -1219,7 +1255,7 @@
   width: 260px;
   height: 260px;
   border-radius: 50%;
-  background: radial-gradient(closest-side, var(--glow-spot), transparent);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--tone, var(--purple)) 45%, transparent), transparent);
   opacity: 0;
   transform: scale(0.6);
   pointer-events: none;
@@ -1234,8 +1270,9 @@
   box-sizing: content-box;
   padding: 10px;
   border-radius: 12px;
-  background: var(--primary-soft);
-  color: var(--purple-ink);
+  background: var(--tone-soft, var(--primary-soft));
+  color: var(--tone-ink, var(--purple-ink));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone, var(--purple)) 45%, transparent);
 }
 .vcard__title {
   margin-top: var(--space-6);
@@ -1262,6 +1299,13 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
+}
+.vsmall__icon {
+  box-sizing: content-box;
+  padding: 8px;
+  border-radius: 10px;
+  background: var(--tone-soft, var(--surface-muted));
+  color: var(--tone-ink, var(--text));
 }
 .vsmall__title {
   margin-top: var(--space-3);
@@ -1357,6 +1401,15 @@
   margin-top: 4px;
   fill: currentColor;
 }
+.promise__list li:nth-child(1) .promise__star {
+  color: var(--purple-ink);
+}
+.promise__list li:nth-child(2) .promise__star {
+  color: var(--burgundy-ink);
+}
+.promise__list li:nth-child(3) .promise__star {
+  color: var(--green-ink);
+}
 .promise__list h3 {
   font-size: 1.2rem;
   font-weight: 650;
@@ -1415,17 +1468,18 @@
     inset 0 -14px 26px rgb(40 30 90 / 0.12),
     0 10px 24px -12px rgb(40 30 90 / 0.35);
 }
+/* Families apply (cyan), organisers run the draw (purple), everyone else verifies (burgundy). */
 .audience[data-tone='a'] .audience__tile {
-  background: radial-gradient(circle at 30% 20%, #fbeef2, #d99aac 80%);
-  color: #6e1a35;
+  background: radial-gradient(circle at 30% 20%, #ebf8f9, #8fd3d9 80%);
+  color: #0a4c54;
 }
 .audience[data-tone='b'] .audience__tile {
   background: radial-gradient(circle at 30% 20%, #f5edfb, #c9a8e8 80%);
   color: #4f2672;
 }
 .audience[data-tone='c'] .audience__tile {
-  background: radial-gradient(circle at 30% 20%, #eaf7ef, #95d5ab 80%);
-  color: #175a34;
+  background: radial-gradient(circle at 30% 20%, #fbeef2, #d99aac 80%);
+  color: #6e1a35;
 }
 .audience__text {
   display: grid;

@@ -317,12 +317,13 @@ function ReplayPanel() {
 
 /* ---------- Showcase ---------- */
 
-const TABS: { key: string; label: string; icon: LucideIcon; panel: () => ReactNode }[] = [
-  { key: 'apply', label: 'Apply', icon: ClipboardList, panel: () => <ApplyPanel /> },
-  { key: 'odds', label: 'Honest odds', icon: Gauge, panel: () => <OddsPanel /> },
-  { key: 'draw', label: 'Freeze & draw', icon: Lock, panel: () => <DrawPanel /> },
-  { key: 'offers', label: 'Offers', icon: Inbox, panel: () => <OffersPanel /> },
-  { key: 'replay', label: 'Replay', icon: ShieldCheck, panel: () => <ReplayPanel /> },
+/** Each stage keeps one colour across the site: apply cyan, odds yellow, draw purple, offers green, verify burgundy. */
+const TABS: { key: string; label: string; icon: LucideIcon; tone: string; panel: () => ReactNode }[] = [
+  { key: 'apply', label: 'Apply', icon: ClipboardList, tone: 'cyan', panel: () => <ApplyPanel /> },
+  { key: 'odds', label: 'Honest odds', icon: Gauge, tone: 'yellow', panel: () => <OddsPanel /> },
+  { key: 'draw', label: 'Freeze & draw', icon: Lock, tone: 'purple', panel: () => <DrawPanel /> },
+  { key: 'offers', label: 'Offers', icon: Inbox, tone: 'green', panel: () => <OffersPanel /> },
+  { key: 'replay', label: 'Replay', icon: ShieldCheck, tone: 'burgundy', panel: () => <ReplayPanel /> },
 ];
 
 export function Showcase() {
@@ -331,9 +332,9 @@ export function Showcase() {
   const { refs, onKeyDown } = useTabKeys(TABS.length, active, setActive);
   const tab = pick(TABS, active);
   return (
-    <div className="showcase">
+    <div className="showcase" data-tone={tab.tone}>
       <div className="showcase__tabs" role="tablist" aria-label="Product tour" onKeyDown={onKeyDown}>
-        {TABS.map(({ key, label, icon: Icon }, n) => (
+        {TABS.map(({ key, label, icon: Icon, tone }, n) => (
           <button
             key={key}
             ref={(el) => {
@@ -346,6 +347,7 @@ export function Showcase() {
             aria-controls={`${id}-panel`}
             tabIndex={n === active ? 0 : -1}
             className="showcase__tab"
+            data-tone={tone}
             onClick={() => {
               setActive(n);
             }}

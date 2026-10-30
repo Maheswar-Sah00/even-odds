@@ -145,9 +145,9 @@ function Outcomes({ r, at }: { r: FairnessReport; at: string | null }) {
     <div className="stack">
       <p className="muted small">Live counts from the offers job{at ? `, recounted ${formatDateTime(at)}` : ''}. These change as families reply, are not hashed, and are the server's word about events after the draw.</p>
       <div className="stat-row">
-        <div className="stat"><span className="stat__value">{o.seatsHeld}</span><span className="stat__label">seats held now (pending or accepted)</span></div>
-        <div className="stat"><span className="stat__value">{o.accepted}</span><span className="stat__label">offers accepted</span></div>
-        <div className="stat"><span className="stat__value">{o.waitlist.children}</span><span className="stat__label">children on a waitlist</span></div>
+        <div className="stat" data-tone="green"><span className="stat__value">{o.seatsHeld}</span><span className="stat__label">seats held now (pending or accepted)</span></div>
+        <div className="stat" data-tone="green"><span className="stat__value">{o.accepted}</span><span className="stat__label">offers accepted</span></div>
+        <div className="stat" data-tone="yellow"><span className="stat__value">{o.waitlist.children}</span><span className="stat__label">children on a waitlist</span></div>
       </div>
       <DataTable
         caption="Offers by status"
@@ -196,10 +196,10 @@ export function FairnessReportView({ report: r, programId, replayMatches = null,
       <Card title="Seats and placements" description="From the published result: the placements the database committed when the draw ran.">
         <div className="stack">
           <div className="stat-row">
-            <div className="stat"><span className="stat__value">{r.drawPlacements} / {r.seats}</span><span className="stat__label">seats allocated by the draw</span></div>
-            <div className="stat"><span className="stat__value">{r.invariants.oversoldSeats}</span><span className="stat__label">oversold seats</span></div>
-            <div className="stat"><span className="stat__value">{r.familiesWithAWeek} / {r.families}</span><span className="stat__label">families with a week</span></div>
-            <div className="stat"><span className="stat__value">{r.childrenWithAWeek} / {r.children}</span><span className="stat__label">children with a week ({r.childrenFullyServed} got every week asked for)</span></div>
+            <div className="stat" data-tone="purple"><span className="stat__value">{r.drawPlacements} / {r.seats}</span><span className="stat__label">seats allocated by the draw</span></div>
+            <div className="stat" data-tone={r.invariants.oversoldSeats === 0 ? 'green' : 'red'}><span className="stat__value">{r.invariants.oversoldSeats}</span><span className="stat__label">oversold seats</span></div>
+            <div className="stat" data-tone="cyan"><span className="stat__value">{r.familiesWithAWeek} / {r.families}</span><span className="stat__label">families with a week</span></div>
+            <div className="stat" data-tone="cyan"><span className="stat__value">{r.childrenWithAWeek} / {r.children}</span><span className="stat__label">children with a week ({r.childrenFullyServed} got every week asked for)</span></div>
           </div>
           {r.unusedSeats > 0 ? <p className="muted small">{r.unusedSeats} seats were left after the draw: nobody who could take them (right week, right age group, still wanting a week) was left.</p> : null}
           <Invariants r={r} />
@@ -306,6 +306,7 @@ export function FairnessPage() {
     <div className="stack">
       <PageHeader
         eyebrow="Public verification"
+        tone="burgundy"
         title="Fairness report card"
         description="Computed in your browser from the frozen inputs, the committed application order and the published result, each re-hashed here first. Families are counted, never named."
       />

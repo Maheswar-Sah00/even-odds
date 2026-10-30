@@ -296,6 +296,7 @@ export function ReplayPage() {
     <div className="stack">
       <PageHeader
         eyebrow="Public verification"
+        tone="burgundy"
         title="Replay the draw"
         description="Check the published draw yourself. This page fetches the frozen inputs, the audit log and the published result, asks drand for the random value, and reruns the same lottery code the server ran, entirely in your browser."
       />

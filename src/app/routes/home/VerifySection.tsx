@@ -50,16 +50,16 @@ sha256sum frozen-inputs.json
 ];
 
 const PRODUCTS: { to: string; icon: LucideIcon; title: string; body: string; tone: string }[] = [
-  { to: `/replay/${DEMO_PROGRAM}`, icon: PlayCircle, title: 'Replay', body: 'Rerun the lottery in your browser, step by step', tone: 'a' },
-  { to: `/audit/${DEMO_PROGRAM}`, icon: ScrollText, title: 'Audit log', body: 'A hash-chained record of every decision', tone: 'b' },
-  { to: `/fairness/${DEMO_PROGRAM}`, icon: Scale, title: 'Fairness', body: 'Outcomes by tier, mode and timing, as a report card', tone: 'c' },
-  { to: '/demo', icon: FlaskConical, title: 'Judge demo', body: 'A private sandbox, seeded and ready in one click', tone: 'd' },
+  { to: `/replay/${DEMO_PROGRAM}`, icon: PlayCircle, title: 'Replay', body: 'Rerun the lottery in your browser, step by step', tone: 'burgundy' },
+  { to: `/audit/${DEMO_PROGRAM}`, icon: ScrollText, title: 'Audit log', body: 'A hash-chained record of every decision', tone: 'purple' },
+  { to: `/fairness/${DEMO_PROGRAM}`, icon: Scale, title: 'Fairness', body: 'Outcomes by tier, mode and timing, as a report card', tone: 'green' },
+  { to: '/demo', icon: FlaskConical, title: 'Judge demo', body: 'A private sandbox, seeded and ready in one click', tone: 'cyan' },
 ];
 
 const SMALL = [
-  { icon: Database, title: 'TablesDB', body: 'Transactions, unique indexes and capped seat counters' },
-  { icon: Radio, title: 'drand', body: 'Public randomness that nobody, including us, controls' },
-  { icon: Hash, title: 'Canonical JSON', body: 'Byte-exact files, so a hash means one thing' },
+  { icon: Database, title: 'TablesDB', body: 'Transactions, unique indexes and capped seat counters', tone: 'green' },
+  { icon: Radio, title: 'drand', body: 'Public randomness that nobody, including us, controls', tone: 'yellow' },
+  { icon: Hash, title: 'Canonical JSON', body: 'Byte-exact files, so a hash means one thing', tone: 'burgundy' },
 ] as const;
 
 export function VerifySection() {
@@ -144,9 +144,9 @@ export function VerifySection() {
           </Link>
         ))}
         <div className="verify__small">
-          {SMALL.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="vsmall">
-              <Icon size={18} strokeWidth={1.6} aria-hidden="true" />
+          {SMALL.map(({ icon: Icon, title, body, tone }) => (
+            <div key={title} className="vsmall" data-tone={tone}>
+              <Icon size={18} strokeWidth={1.6} className="vsmall__icon" aria-hidden="true" />
               <span className="vsmall__title">{title}</span>
               <span className="vsmall__body">{body}</span>
             </div>

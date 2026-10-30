@@ -136,6 +136,7 @@ export function AuditPage() {
     <div className="stack">
       <PageHeader
         eyebrow="Public verification"
+        tone="burgundy"
         title="Audit log"
         description="Every key event, hash-chained: each entry includes the hash of the one before it, so any edit breaks the chain. Identifiers are pseudonymous; no names, birthdates or homes are published."
       />

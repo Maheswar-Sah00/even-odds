@@ -387,7 +387,7 @@ export function NewApplicationPage() {
   if (!appwrite) {
     return (
       <div className="stack">
-        <PageHeader eyebrow="New application" title="Apply to a program" />
+        <PageHeader tone="cyan" eyebrow="New application" title="Apply to a program" />
         <NotConfiguredBanner what="Applications" />
       </div>
     );
@@ -400,7 +400,7 @@ export function NewApplicationPage() {
           const phase = phaseOf(ctx.program);
           return (
             <>
-              <PageHeader eyebrow={ctx.application ? 'Edit application' : 'New application'} title={`Apply: ${ctx.program.name}`} />
+              <PageHeader tone="cyan" eyebrow={ctx.application ? 'Edit application' : 'New application'} title={`Apply: ${ctx.program.name}`} />
               {ctx.program.synthetic ? <p><SyntheticBadge /></p> : null}
               {ctx.household === null ? (
                 <EmptyState title="Set up your household first" actions={<ButtonLink to="/family">Go to your household</ButtonLink>}>

@@ -159,7 +159,7 @@ export function ChildrenPage() {
   if (!appwrite || !db) {
     return (
       <div className="stack">
-        <PageHeader eyebrow="My family" title="Children" />
+        <PageHeader tone="cyan" eyebrow="My family" title="Children" />
         <NotConfiguredBanner what="Your children" />
       </div>
     );
@@ -170,6 +170,7 @@ export function ChildrenPage() {
     <div className="stack">
       <PageHeader
         eyebrow="My family"
+        tone="cyan"
         title="Children"
         description="Children's details are visible only to your household's guardians. Organisers of a program see only a scrambled ticket for each child entered, never names or birthdays."
         actions={familyId ? <Button icon={<Plus size={18} aria-hidden="true" />} onClick={() => { setDialog({ mode: 'add' }); }}>Add a child</Button> : null}

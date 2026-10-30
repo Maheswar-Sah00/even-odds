@@ -223,7 +223,7 @@ export function MyOffersPage() {
 
   return (
     <div className="stack">
-      <PageHeader eyebrow="My family" title="Offers and waitlist" description="Places from the draw and from the waitlist. Replies and expiry are decided by the server clock, not your device." />
+      <PageHeader tone="green" eyebrow="My family" title="Offers and waitlist" description="Places from the draw and from the waitlist. Replies and expiry are decided by the server clock, not your device." />
       {!appwrite ? (
         <NotConfiguredBanner what="Offers" />
       ) : (
